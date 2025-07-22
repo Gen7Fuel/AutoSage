@@ -2,7 +2,7 @@
 
 # Set base image
 ARG BASE_IMAGE=python:3.10-buster
-FROM $BASE_IMAGE as runtime-image
+FROM $BASE_IMAGE AS runtime-image
 
 # Optional field
 LABEL maintainer="peter@gen7fuel.com"
@@ -20,12 +20,12 @@ COPY requirements.txt /tmp/requirements.txt
 RUN pip install --no-cache --default-timeout=1200 -r /tmp/requirements.txt && rm -f /tmp/requirements.txt
 
 # Set an internal user userId
-# ARG INTERNAL_UID=999
+ARG INTERNAL_UID=999
 # Set an internal user groupId
-# ARG INTERNAL_GID=0
+ARG INTERNAL_GID=0
 # Create the defined groupId, then add userId into groupId, and set home directory to /home/internal_docker
-# RUN groupadd -f -g ${INTERNAL_GID} internal_group && \
-    # useradd -m -d /home/internal_docker -s /bin/bash -g ${INTERNAL_GID} -u ${INTERNAL_UID} internal_docker
+RUN groupadd -f -g ${INTERNAL_GID} internal_group && \
+    useradd -m -d /home/internal_docker -s /bin/bash -g ${INTERNAL_GID} -u ${INTERNAL_UID} internal_docker
 
 # Set app working directory
 WORKDIR /app
