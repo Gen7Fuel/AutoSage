@@ -1,0 +1,13 @@
+version: "3"
+services:
+  auto_sage:
+    build:
+      context: .
+    container_name: auto_sage
+    command: |
+      bash -c "
+        streamlit run Home.py --server.port 8501 --server.address=0.0.0.0 --logger.level=info
+      "
+    working_dir: /app
+    ports:
+      - "8501:8501"
