@@ -1,7 +1,7 @@
 ### FIRST STAGE - RUNTIME BUILD ###
 
 # Set base image
-ARG BASE_IMAGE=python:3.10-buster
+ARG BASE_IMAGE=python:3.11-slim
 FROM $BASE_IMAGE AS runtime-image
 
 # Optional field
