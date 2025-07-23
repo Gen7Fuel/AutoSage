@@ -50,7 +50,7 @@ def get_vendor_pivot_table(dataframe, vendor_name):
 
 
 def update_on_hand_qty(df_pivot, unique_months):
-    for current_month in unique_months:
+    for current_month in unique_months[:-1]:
         if current_month == unique_months.min():
             df_pivot[(current_month, "QTY, On Hand")] = (
                 df_pivot[(current_month, "Purch QTY")]
