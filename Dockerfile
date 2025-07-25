@@ -52,4 +52,4 @@ COPY --chown=${INTERNAL_UID}:${INTERNAL_GID} . .
 EXPOSE 8501
 
 # Start the app
-CMD [ "streamlit", "run" , "Home.py", "--server.port=8501", "--server.address=0.0.0.0", "--server.enableCORS=false", "--server.enableWebsocketCompression=true", "--logger.level=info", "--server.enableXsrfProtection=false"]
+CMD [ "streamlit", "run" , "🏠_Home.py", "--server.port=8501", "--server.address=0.0.0.0", "--server.enableCORS=false", "--server.enableWebsocketCompression=true", "--logger.level=info", "--server.enableXsrfProtection=false"]

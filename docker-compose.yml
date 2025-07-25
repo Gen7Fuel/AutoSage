@@ -6,7 +6,7 @@ services:
     container_name: auto_sage
     command: |
       bash -c "
-        streamlit run Home.py --server.port 8501 --server.address=0.0.0.0 --logger.level=info
+        streamlit run 🏠_Home.py --server.port 8501 --server.address=0.0.0.0 --logger.level=info
       "
     working_dir: /app
     ports:
