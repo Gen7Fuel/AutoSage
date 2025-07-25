@@ -8,4 +8,8 @@ import src.demand_analysis_assistant.app as demand_analysis_assistant
 # calling app wise layout
 # layout.wide()
 
+
+from utils.security import require_login
+require_login()
+
 demand_analysis_assistant.run()

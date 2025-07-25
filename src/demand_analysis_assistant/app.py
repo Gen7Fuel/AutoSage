@@ -26,37 +26,6 @@ def run():
             df = df.loc[8:].reset_index(drop=True)
             df_processed = preprocess_raw_file(df)
 
-            ## Filter Vendor
-            # Vapes
-            # 1. Rankin
-            # a. G-Core
-            # b. Fog Formula
-            # c. Smoke Tokes
-            # d. Maq Distribution
-
-            # 2. Walpole
-            # a. Smoke Tokes
-            # b. Maq Distribution
-
-            # 3. Fort Frances
-            # a. G-Core
-            # b. Fog Formula
-            # c. Smoke Tokes
-            # d. Maq Distribution
-
-            # 4. Silver Grizzly
-            # a. G-Core
-            # b. Fog Formula
-            # c. Smoke Tokes
-            # d. Maq Distribution
-
-            # Cannabis
-            # 1. Silver Grizzly
-
-            # a. Proulx Commercial Growers
-            # b. Cannabis Soda Co.
-            # c. Native Flower
-
             unique_vendors = df_processed["Vendor"].unique()
 
             option = st.selectbox(
@@ -122,7 +91,7 @@ def run():
                     file_name="pivot_table.xlsx",
                     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                 )
-                
+
     except Exception as e:
         st.error(
             "🐞 **Something went wrong!**\n\n"

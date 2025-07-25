@@ -96,6 +96,20 @@ Updating daily fuel prices manually from various suppliers across Canada is erro
 
 ---
 
+## 🧼 User-Friendly Error Handling
+
+If something breaks, the tool displays this message:
+
+```
+🐞 Something went wrong!
+Please make sure all file formats and structures are correct.
+If the issue persists, contact Peter@gen7fuel.com for help 💌
+```
+
+With a toggleable section to view full traceback for debugging. 🧑‍🔧
+
+---
+
 ## 🚀 Future Enhancements
 
 - Email delivery of generated CSV.
@@ -103,27 +117,3 @@ Updating daily fuel prices manually from various suppliers across Canada is erro
 - Authentication or admin interface.
 - Logging of change history or pricing audit trail.
 ---
-
-
-
-
-
-
-
-
-
-
-<!-- ## **Description**
-
-This app provides an experiment analysis service measuring the effect of new marketing initiatives by simply plugging in experiment records.
-
-## **Features**
- - Create visually and simple way for Test/control group analysis 
- - Break your data in weekly and monthly report, Also notify when wrong input
- - Generate visitor and store based analysis e.g. box plot, line plot, histograms etc
-
-## **TO DO**
- - Perform more check on data sanity
- - Create a thresold for data points if less datapoint exist
- - .....
- -->

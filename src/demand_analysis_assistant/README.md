@@ -1,105 +1,140 @@
 # AutoSage
 
-## **Canco Price Importer**
+## **Demand Analysis Assistant**
 
-## **Authors**
+### **Author**  
+Peter Lee – Data Scientist @gen7fuel – [peter@gen7fuel.com](mailto:peter@gen7fuel.com)
 
-Peter Lee - Data Scientist @gen7fuel - peter@gen7fuel.com 
+### **History**  
+2025.07.25 – Creation.
 
-## **History**
+---
 
-2025.07.25 - Creation.
+## 🧠 Description
 
-## **Description**
+The **Demand Analysis Assistant** is a Streamlit-powered internal tool to help inventory analysts and buyers assess product movement, calculate bi-weekly sales forecasts, and determine reordering needs across different vendors and stores.  
 
-A Streamlit-based tool to automate daily fuel price updates across Canada, transforming `.xlsx` price sheets into a Bookworks-compatible `.csv` file.
-
-Hosted at: [autosage.gen7fuel.com](http://autosage.gen7fuel.com)
+This tool processes exported purchase and sales reports (from POS or ERP systems), and outputs a fully analyzed Excel pivot table per vendor, making inventory decision-making fast, data-driven, and repeatable.
 
 ---
 
 ## 📌 Project Motivation
 
-Updating daily fuel prices manually from various suppliers across Canada is error-prone and inefficient. This tool streamlines the process by allowing users to upload Excel sheets for Eastern and Western Canada, automatically generating a merged and cleaned CSV file formatted for Bookworks.
+Manual forecasting of purchase quantities and on-hand inventory is slow and inconsistent. This tool removes the guesswork by calculating:
+
+- Historical monthly sales  
+- Bi-weekly sales trends  
+- Shelf life of products (based on movement)  
+- Recommended reorders based on safety stock logic  
+
+It is designed to support Gen7 Fuel buyers and store operators in reducing stockouts and overstock, especially for high-volume categories like **vape** and **cannabis**.
 
 ---
 
 ## ⚙️ What the Tool Does
 
-### Inputs:
-- **East Price File** (`.xlsx`) — includes cities like Toronto, Hamilton, London, etc.
-- **Rest of Canada Price File** (`.xlsx`) — includes Kamloops, Vancouver, Winnipeg, etc.
-- **Original Bookworks CSV File** — serves as a base template for updating.
+### ✅ Inputs:
+- An Excel file (exported raw sales/purchase report) per location.
+- Vendor filter dropdown in-app to select a target vendor.
 
 ---
 
-## 🔁 Process Flow
+### 🔁 Process Flow
 
-### 1. Parse Excel Files:
-- Extract fuel grades and base prices per city.
-- Determine the “Effective Date” and format it for Bookworks.
-- Normalize data using internal mappings:
-  - `supplier_code_map`
-  - `inventory_item_map`
-  - `supplier_item_map`
+1. **Upload Raw File**  
+   - Parses and cleans the uploaded Excel file.  
+   - Extracts `Month`, `UPC`, `Vendor`, `Purch QTY`, `QTY`, and `QTY, On Hand`.
 
-### 2. Clean and Consolidate Data:
-- Merge East and Rest data into a single DataFrame.
-- Remove duplicates, keeping the most recent price updates.
-- `'WULSD'` (Winter Diesel) price is set equal to `'ULSD'` (Diesel).
-- If there is a discrepancy in base prices across files, the tool records the **higher base price**.
-- Only locations with a defined `supplier_code` are processed; cities like **Calgary** and **Edmonton** are ignored.
+2. **Vendor Selection**  
+   - Automatically detects all vendors from the dataset.  
+   - User selects one to generate analysis.
 
-### 3. Merge with Original CSV:
-- Match data by `Supplier Code` and `Inventory Item`.
-- Overwrite only where new price or effective date is found.
+3. **Pivot Table Creation**  
+   - Monthly pivot of:  
+     - Purchase Quantity  
+     - Sale Quantity  
+     - On-Hand Quantity  
+     - LIQ % = Sales / (Sales + On Hand)  
+   - Fills missing months with 0s to ensure time continuity.
 
-### 4. Output:
-- Display updated CSV in the browser.
-- Allow user to download the final Bookworks-ready file.
+4. **Sales Forecasting & Inventory Logic**  
+   - **Cumulative Sales (`Sale QTY`)**  
+   - **Shelf Life** = number of months with sales activity  
+   - **Avg Sales/Mnth**  
+   - **Bi-Weekly Forecast** = Rounded (Avg Sales/Mnth ÷ 2)  
+   - **Safety Stock** = 50% of Bi-Weekly Sales  
+   - **Order Quantity** = Forecast + Safety - Current Stock (if needed)
+
+5. **Output**  
+   - Clean pivot table sorted by highest selling products  
+   - Downloadable Excel file with all calculations prefilled
 
 ---
 
-## ✅ Benefits
+## 🧮 Example Calculations
 
-- **Automated pricing updates** — no manual spreadsheet editing required.
-- **Accurate formatting** — fully compatible with Bookworks import expectations.
-- **Mapping logic** — ensures consistent and traceable data transformations.
-- **Overwrite only when needed** — preserves historical values unless explicitly updated.
+| Metric               | Formula                                      |
+|----------------------|----------------------------------------------|
+| `LIQ %`              | `QTY / (QTY + On Hand)`                      |
+| `Shelf Life`         | Count of months with `QTY > 0`              |
+| `Avg Sales/Mnth`     | `Sale QTY / Shelf Life`                      |
+| `Bi-Weekly Forecast` | Rounded(`Avg Sales/Mnth / 2`)                |
+| `Safety STK`         | 50% of forecast                              |
+| `Order`              | If needed: `Forecast + Safety - On Hand`     |
 
 ---
 
 ## 🧰 Technical Overview
 
-- **Frontend:** Streamlit Web UI
-- **Backend:** Python + Pandas
-- **Excel Parsing:** `openpyxl`
-- **Output Format:** `.csv`
-- **Mappings:** Defined in `constants.py`
+- **Frontend:** Streamlit  
+- **Backend:** Python (Pandas, NumPy)  
+- **Excel Engine:** `openpyxl`  
+- **UI Interaction:** File Upload, Vendor Dropdown  
+- **Output Format:** Downloadable `.xlsx` pivot table
+
+---
+
+## ✅ Benefits
+
+- 🧮 **Automated forecasting logic**  
+- 📦 **Improved inventory accuracy**  
+- 🕒 **Time-saving for buyers**  
+- 📉 **Reduces human error in Excel**  
+- 💡 **Vendor-specific insight**
 
 ---
 
 ## 🔒 Maintenance & Risks
 
-| Risk | Description | Mitigation |
-|------|-------------|------------|
-| **Excel Format Drift** | Changes in the uploaded file structure may break parsing. | Add row-based validation and raise warnings. |
-| **New Cities or Grades** | Missing mappings will skip data. | Regularly update `constants.py`. |
-| **Incorrect File Uploads** | Wrong file order or structure causes confusion. | Improve UI prompts and validations. |
-| **Downtime** | Hosting issues may delay updates. | Add basic monitoring and fallback instructions. |
+| Risk               | Description                                  | Mitigation                        |
+|--------------------|----------------------------------------------|------------------------------------|
+| **Format Drift**   | Input Excel layout might change over time.   | Add row-based schema detection.   |
+| **Vendor Mismatch**| Filtering fails if vendor names differ.      | Normalize vendor names pre-filter.|
+| **Incorrect Inputs**| Users might upload wrong files or formats.  | Show user-friendly error messages.|
+| **Performance**    | Large files may slow Streamlit.              | Use caching and chunk processing. |
 
-### Maintenance Recommendations:
-- Review mappings and parsing logic quarterly.
-- Add unit tests for parsing functions.
-- Monitor server performance or usage.
-- Log parsing failures and upload issues.
+---
+
+## 🧼 User-Friendly Error Handling
+
+If something breaks, the tool displays this message:
+
+```
+🐞 Something went wrong!
+Please make sure all file formats and structures are correct.
+If the issue persists, contact Peter@gen7fuel.com for help 💌
+```
+
+With a toggleable section to view full traceback for debugging. 🧑‍🔧
 
 ---
 
 ## 🚀 Future Enhancements
 
-- Email delivery of generated CSV.
-- Bookworks API integration (if available).
-- Authentication or admin interface.
-- Logging of change history or pricing audit trail.
+- Multi-vendor batch processing  
+- Visualization of trends (e.g. charts)  
+- Filter by store, category, or SKU group  
+- Integration with POS or inventory APIs  
+- AI-powered demand anomaly detection
+
 ---
