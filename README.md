@@ -81,27 +81,25 @@ AutoSage is protected by a **login page** to ensure only authorized team members
 - Hidden credentials stored in a separate configuration file.
 
 ### 🔐 Credentials File
-Credentials are managed in a dedicated Python dictionary stored in:
+Credentials are environment variables defined in a `.env` file located at the proejct root.
 
-```bash
-src/auth/credentials.py
-```
+Example `.env` content:
 
-Example:
-```python
-# src/auth/credentials.py
-CREDENTIALS = {
-    "admin": "supersecure123",
-    "peter": "gen7datarocks",
-}
+```env
+ADMIN_USER=admin
+ADMIN_PASS=supersecure123
+PETER_USER=peter
+PETER_PASS=gen7datarocks
 ```
+The application reads these variables at runtime to authenticate users.
+
 
 ---
 
 ## 🚧 Security Note
-- Avoid pushing `credentials.py` to a public repository.
-- Use `.gitignore` to exclude this file in production environments.
-- For enhanced security, consider integrating `streamlit-authenticator`, environment variables, or OAuth in future releases.
+- Do not commit your `.env` file to any public repository. Add `.env` to `.gitignore` to keep it private.
+- Using environment variables improves security by avoiding hardcoded credentials in the codebase.
+- For further security enhancements, consider integrating libraries like `streamlit-authenticator`, OAuth providers, or centralized secrets management in future releases.
 
 ---
 
