@@ -1,6 +1,7 @@
 import streamlit as st
 from utils.security import require_login
 from streamlit.logger import get_logger
+from streamlit_extras.switch_page_button import switch_page
 
 # Landing page
 import landing
@@ -15,18 +16,19 @@ st.set_page_config(
 
 def run():
     
-    require_login()
+    # require_login()
     landing.main()
+
 
 def startup():
     # Session-based authentication
     if "authenticated" not in st.session_state:
         st.session_state["authenticated"] = False
 
-    if not st.session_state["authenticated"]:
-        require_login()
-    else:
-        run()
+    # if not st.session_state["authenticated"]:
+    #     require_login()
+    # else:
+    run()
 
 if __name__ == "__main__":
     startup()

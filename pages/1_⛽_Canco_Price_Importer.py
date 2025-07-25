@@ -1,5 +1,7 @@
 # local imports
 import src.canco_price_importer.app as canco_price_importer
+import streamlit as st
+from utils.security import require_login
 # import utils.layout as layout
 # from utils import analytics, analytics_events
 
@@ -8,7 +10,10 @@ import src.canco_price_importer.app as canco_price_importer
 # calling app wise layout
 # layout.wide()
 
-from utils.security import require_login
-require_login()
+if "authenticated" not in st.session_state:
+    st.session_state["authenticated"] = False
 
-canco_price_importer.run()
+if not st.session_state["authenticated"]:
+    require_login()
+else:
+    canco_price_importer.run()

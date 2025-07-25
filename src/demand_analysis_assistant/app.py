@@ -2,11 +2,49 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 from pathlib import Path
+import base64
 
 from src.demand_analysis_assistant.apps.utils.functions import *
 
 
 def run():
+
+    # Set page config
+    st.set_page_config(page_title="Demand Analysis Assistant", page_icon="🚀", layout="wide")
+
+    # Load logo
+    logo_path = Path("assets/images/gen7_logo.png")
+    if logo_path.exists():
+        logo_base64 = base64.b64encode(logo_path.read_bytes()).decode()
+        st.markdown(
+            f"""
+            <div style="text-align: right;">
+                <img src="data:image/png;base64,{logo_base64}" width="160"/>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+    # Title and subtitle
+    st.write()
+    st.markdown("## 🚀 Demand Analysis Assistant")
+    st.write()
+    st.markdown(
+        """
+        The Demand Analysis Assistant empowers your inventory and purchasing team with data-driven insights
+        by transforming vendor sales history into actionable forecasts.
+
+        This tool ingests raw purchasing and sales data, cleans and organizes it into a pivot-based structure,
+        and calculates key metrics like monthly sales averages, liquidity ratios, shelf life, and safety stock levels.
+        It then uses these insights to automatically recommend bi-weekly order quantities.
+
+        Whether you're managing fast-moving vapes or cannabis products with variable demand,
+        the Demand Analysis Assistant helps ensure optimal stock levels and reduces the risk of over/under-ordering.
+        """
+    )
+
+    st.markdown("---")
+
 
     file_to_format = st.file_uploader("Choose a file 🔍", type=".xlsx")
 

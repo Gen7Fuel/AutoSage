@@ -1,5 +1,7 @@
 # local imports
 import src.demand_analysis_assistant.app as demand_analysis_assistant
+import streamlit as st
+from utils.security import require_login
 # import utils.layout as layout
 # from utils import analytics, analytics_events
 
@@ -8,8 +10,10 @@ import src.demand_analysis_assistant.app as demand_analysis_assistant
 # calling app wise layout
 # layout.wide()
 
+if "authenticated" not in st.session_state:
+    st.session_state["authenticated"] = False
 
-from utils.security import require_login
-require_login()
-
-demand_analysis_assistant.run()
+if not st.session_state["authenticated"]:
+    require_login()
+else:
+    demand_analysis_assistant.run()

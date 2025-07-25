@@ -1,16 +1,50 @@
 import streamlit as st
 import pandas as pd
-import numpy as np
 from pathlib import Path
+import base64
 
 from src.canco_price_importer.apps.utils.functions import *
 
 
 def run():
+    # Set page config
+    st.set_page_config(page_title="Canco Price Importer", page_icon="⛽", layout="wide")
 
-    east_price = st.file_uploader("Upload East of rack price 🔍", type=".xlsx")
-    rest_price = st.file_uploader("Upload Rest of rack price 🔍", type=".xlsx")
-    original_csv = st.file_uploader("Original CSV upload 🔍", type=".csv")
+    # Load logo
+    logo_path = Path("assets/images/gen7_logo.png")
+    if logo_path.exists():
+        logo_base64 = base64.b64encode(logo_path.read_bytes()).decode()
+        st.markdown(
+            f"""
+            <div style="text-align: right;">
+                <img src="data:image/png;base64,{logo_base64}" width="160"/>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+    # Title and subtitle
+    st.write()
+    st.markdown("## ⛽ Canco Price Importer")
+    st.write()
+    st.markdown(
+        """
+        The Canco Price Importer is designed to streamline your daily fuel pricing workflow
+        by automatically consolidating wholesale price data directly from Canco.
+
+        This tool efficiently imports and cleans raw pricing files, transforms the data into a standardized format,
+        and outputs Bookworks-compatible CSVs ready for immediate use.
+        
+        By automating these steps, the app reduces manual effort, minimizes errors, and ensures your pricing data is always up to date
+        — enabling your team to make faster, data-driven decisions with confidence.
+        """
+    )
+
+    st.markdown("---")
+
+    east_price = st.file_uploader("Upload Eastern rack price file from Canco 🔍", type=".xlsx")
+    rest_price = st.file_uploader("Upload Rest of rack price file from Canco 🔍", type=".xlsx")
+    original_csv = st.file_uploader("Upload Bookworks price importing format 🔍", type=".csv")
 
     if east_price and rest_price and original_csv:
         try:
