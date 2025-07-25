@@ -2,8 +2,6 @@ import streamlit as st
 from auth.credentials import CREDENTIALS
 
 
-
-
 def require_login():
 
     if "authenticated" not in st.session_state:
