@@ -102,3 +102,6 @@ data/
 # Optional: ignore Dockerfile-generated files
 Dockerfile.*
 .dockerignore
+
+# Auth file not to be pushed
+auth/credentials.py

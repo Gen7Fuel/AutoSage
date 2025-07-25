@@ -69,6 +69,42 @@ Built with **Streamlit**, these lightweight yet powerful web apps replace tediou
 
 ---
 
+---
+
+## 🔐 Access Control
+
+AutoSage is protected by a **login page** to ensure only authorized team members can access internal tools.
+
+### ✅ Login Features
+- Simple username/password authentication.
+- Prevents navigation to individual apps without logging in.
+- Hidden credentials stored in a separate configuration file.
+
+### 🔐 Credentials File
+Credentials are managed in a dedicated Python dictionary stored in:
+
+```bash
+src/auth/credentials.py
+```
+
+Example:
+```python
+# src/auth/credentials.py
+CREDENTIALS = {
+    "admin": "supersecure123",
+    "peter": "gen7datarocks",
+}
+```
+
+---
+
+## 🚧 Security Note
+- Avoid pushing `credentials.py` to a public repository.
+- Use `.gitignore` to exclude this file in production environments.
+- For enhanced security, consider integrating `streamlit-authenticator`, environment variables, or OAuth in future releases.
+
+---
+
 ## 🔒 Maintenance Notes
 
 | Risk                        | Mitigation                             |

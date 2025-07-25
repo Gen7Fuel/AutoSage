@@ -1,11 +1,11 @@
 import streamlit as st
+from auth.credentials import CREDENTIALS
 
-AUTHORIZED_USERS = {
-    "peter": "gen7secure",
-    "admin": "admin123",
-}
+
+
 
 def require_login():
+
     if "authenticated" not in st.session_state:
         st.session_state["authenticated"] = False
 
@@ -15,8 +15,8 @@ def require_login():
         username = st.text_input("Username")
         password = st.text_input("Password", type="password")
         if st.button("Login"):
-            if username in AUTHORIZED_USERS and AUTHORIZED_USERS[username] == password:
-                st.session_state["authenticated"] = True
+            if username in CREDENTIALS and password == CREDENTIALS[username]:
+                st.session_state.authenticated = True
                 st.rerun()
             else:
                 st.error("❌ Invalid username or password.")
